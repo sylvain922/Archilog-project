@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: archilog
+Version: 0.2
+Summary: A simple project for educational purpose.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: click>=8.1.7
+Requires-Dist: flask>=3.1.0
+Requires-Dist: sqlalchemy>=2.0.40
+
+# archilog
+
+A simple project for educational purpose.
+
+```bash
+$ uv sync
+$ uv run archilog
+Usage: archilog [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  create
+  delete
+  get
+  get-all
+  import-csv
+  init-db
+  update
+```
+
+Course & examples : [https://kathode.neocities.org](https://kathode.neocities.org)

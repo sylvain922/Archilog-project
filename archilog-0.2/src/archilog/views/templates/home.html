@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Entrées</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4 text-center">Liste des Entrées</h1>
+
+        <!-- Affichage des entrées existantes -->
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Montant</th>
+                    <th scope="col">Catégorie</th>
+                    <th scope="col">Date</th>
+                    <th colspan="2" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.name }}</td>
+                        <td>{{ entry.amount }} €</td>
+                        <td>{{ entry.category or '-' }}</td>
+                        <td>{{ entry.date }}</td>
+                        <td class="text-center">
+                            <form method="POST" action="{{ url_for('web_ui.delete_entry', id=entry.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                        <td class="text-center">
+                            <!-- Formulaire de modification -->
+                            <form method="POST" action="{{ url_for('web_ui.update_entry', id=entry.id) }}">
+                                <h4>Modifier l'Entrée - {{ entry.name }}</h4>
+                                <div class="form-group">
+                                    <label for="name">Nom</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ entry.name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">Montant (€)</label>
+                                    <input type="number" step="0.01" class="form-control" id="amount" name="amount" value="{{ entry.amount }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Catégorie</label>
+                                    <input type="text" class="form-control" id="category" name="category" value="{{ entry.category }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                                <a href="{{ url_for('web_ui.index') }}" class="btn btn-secondary">Retour à la liste</a>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune entrée disponible</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <fieldset>
+        <!-- Formulaire d'ajout d'une nouvelle entrée -->
+        <h2>Ajouter une Nouvelle Entrée</h2>
+        <form method="POST" action="{{ url_for('web_ui.create_entry') }}">
+            <div class="form-group">
+                <label for="name">Nom :</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Montant (€) :</label>
+                <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Catégorie :</label>
+                <input type="text" class="form-control" id="category" name="category">
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </form>
+        </fieldset>
+        <h2>Importer des Entrées</h2>
+
+        <form method="POST" action="{{ url_for('web_ui.import_entries') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="csv_file">Sélectionner un fichier CSV :</label>
+                <input type="file" class="form-control" name="csv_file" id="csv_file" required>
+            </div>
+            <button type="submit" class="btn btn-success">Importer</button>
+        </form>
+
+        <!-- Conteneur pour les boutons Exporter et Importer -->
+        <div class="button-container mt-4 text-center">
+            <!-- Bouton Exporter -->
+            <a href="{{ url_for('web_ui.export_entries') }}" class="btn btn-info btn-lg">Exporter en CSV</a>
+        </div>
+    </div>
+</body>
+</html>

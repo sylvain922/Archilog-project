@@ -1,0 +1,28 @@
+[project]
+name = "archilog"
+version = "0.2"
+description = "A simple project for educational purpose."
+readme = "README.md"
+dependencies = [
+    "click>=8.1.7",
+    "flask>=3.1.0",
+    "sqlalchemy>=2.0.40",
+]
+requires-python = ">=3.10"
+
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+
+[project.scripts]
+archilog = "archilog.views.cli:cli"
+
+[tool.pyproject-runner.tasks]
+start = {cmd = "flask --app archilog.views --debug run", env-file = "!/dev.env"}
+
+[dependency-groups]
+dev = [
+    "pyproject-runner>=0.3.0",
+]
