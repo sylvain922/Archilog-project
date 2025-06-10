@@ -8,6 +8,8 @@
 </head>
 <body>
     <div class="container">
+        <h1> Bonjour, {{ user }}
+
         <h1 class="my-4 text-center">Liste des Entrées</h1>
 
         <!-- Affichage des entrées existantes -->
@@ -29,6 +31,7 @@
                         <td>{{ entry.category or '-' }}</td>
                         <td>{{ entry.date }}</td>
                         <td class="text-center">
+                            <!-- Bouton Supprimer -->
                             <form method="POST" action="{{ url_for('web_ui.delete_entry', id=entry.id) }}">
                                 <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                             </form>
@@ -36,18 +39,16 @@
                         <td class="text-center">
                             <!-- Formulaire de modification -->
                             <form method="POST" action="{{ url_for('web_ui.update_entry', id=entry.id) }}">
+                                {{ form.csrf_token }}
                                 <h4>Modifier l'Entrée - {{ entry.name }}</h4>
                                 <div class="form-group">
-                                    <label for="name">Nom</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ entry.name }}" required>
+                                    {{ form.name.label }} {{ form.name(size=20) }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="amount">Montant (€)</label>
-                                    <input type="number" step="0.01" class="form-control" id="amount" name="amount" value="{{ entry.amount }}" required>
+                                    {{ form.amount.label }} {{ form.amount(step=0.01) }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="category">Catégorie</label>
-                                    <input type="text" class="form-control" id="category" name="category" value="{{ entry.category }}">
+                                    {{ form.category.label }} {{ form.category(size=20) }}
                                 </div>
                                 <button type="submit" class="btn btn-primary">Sauvegarder</button>
                                 <a href="{{ url_for('web_ui.index') }}" class="btn btn-secondary">Retour à la liste</a>
@@ -66,17 +67,15 @@
         <!-- Formulaire d'ajout d'une nouvelle entrée -->
         <h2>Ajouter une Nouvelle Entrée</h2>
         <form method="POST" action="{{ url_for('web_ui.create_entry') }}">
+            {{ form.csrf_token }}
             <div class="form-group">
-                <label for="name">Nom :</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                {{ form.name.label }} {{ form.name(size=20) }}
             </div>
             <div class="form-group">
-                <label for="amount">Montant (€) :</label>
-                <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+                {{ form.amount.label }} {{ form.amount(step=0.01) }}
             </div>
             <div class="form-group">
-                <label for="category">Catégorie :</label>
-                <input type="text" class="form-control" id="category" name="category">
+                {{ form.category.label }} {{ form.category(size=20) }}
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         </form>
